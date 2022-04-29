@@ -1,0 +1,34 @@
+.form__input {
+  width: 100%;
+  border: none;
+  font-size: 14px;
+  line-height: 17px;
+  font-style: normal;
+  font-weight: normal;
+  background-color: transparent;
+  margin: 0;
+  padding: 0;
+  padding-bottom: 11.76px;
+  /* margin-top: 54px; */
+  border-bottom: 1px solid #c4c4c4;
+  transition: 0.3s;
+}
+
+/* .form__input.form__input-job {
+  margin-top: 0;
+}
+
+.form__input.form__input-link */
+
+.form__input:hover {
+  border-bottom-color: #000;
+}
+
+.form__input:focus {
+  border-bottom-color: #007dff;
+}
+
+.form__input_type_error {
+  border-bottom-color: red;
+}
+
