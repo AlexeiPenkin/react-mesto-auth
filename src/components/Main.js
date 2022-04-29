@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { api } from '../utils/Api';
 import { Card } from './Card';
-import { ImagePopup } from './ImagePopup';
+// import { ImagePopup } from './ImagePopup';
 
 
 export function Main(props) {
@@ -20,7 +20,7 @@ export function Main(props) {
     .catch((err) => {
       console.log(err);
     })
-  });
+  }, []);
 
   useEffect(() => {
     api.getCards()
@@ -74,9 +74,9 @@ export function Main(props) {
       </section>
 
       <div className="card-list">
-        {cards.map((card, id) => (
+        {cards.map((card, _id) => (
             <Card
-              key={id}
+              key={_id}
               card={card}
               link={card.src}
               name={card.name}
