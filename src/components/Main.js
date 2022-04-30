@@ -74,9 +74,9 @@ export function Main(props) {
       </section>
 
       <div className="card-list">
-        {cards.map((card, _id) => (
+        {cards.map((card) => (
             <Card
-              key={_id}
+              key={card._id}
               card={card}
               link={card.src}
               name={card.name}
@@ -87,7 +87,6 @@ export function Main(props) {
             />
         ))}
       </div>
-
     </main>
   )
 }
