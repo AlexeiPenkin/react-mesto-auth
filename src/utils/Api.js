@@ -26,20 +26,25 @@ class Api {
     .then(this._checkResponse)
   }
 
-  editProfile(name, about) {
+  editProfile(data) {
     return fetch(`${this._baseUrl}/users/me`, {
       method: 'PATCH',
       headers: this._headers,
-      body: JSON.stringify({ name, about })
+      body: JSON.stringify({ 
+        name: data.name, 
+        about: data.about })
     })
     .then(this._checkResponse)
   }
 
-  addCard(name, link) {
+  addCard(data) {
     return fetch(`${this._baseUrl}/cards`, {
       method: 'POST',
       headers: this._headers,
-      body: JSON.stringify({ name, link })
+      body: JSON.stringify({ 
+        name: data.name,
+        link: data.link 
+      })
     })
     .then(this._checkResponse)
   }
@@ -47,6 +52,22 @@ class Api {
   deleteCard(id) {
     return fetch(`${this._baseUrl}/cards/${id}`, {
       method: 'DELETE',
+      headers: this._headers
+    })
+    .then(this._checkResponse)
+  }
+
+  changeLikeCardStatus(cardId, isLiked) {
+    return fetch(`${this._baseUrl}/cards/likes/${cardId}`, {
+      method: isLiked ? 'PUT' : 'DELETE',
+      headers: this._headers
+    })
+        .then(this._checkResponse)
+  }
+
+  addLike(id) {
+    return fetch(`${this._baseUrl}/cards/${id}/likes`, {
+      method: 'PUT',
       headers: this._headers
     })
     .then(this._checkResponse)
@@ -60,19 +81,13 @@ class Api {
     .then(this._checkResponse)
   }
 
-  addLike(id) {
-    return fetch(`${this._baseUrl}/cards/${id}/likes`, {
-      method: 'PUT',
-      headers: this._headers
-    })
-    .then(this._checkResponse)
-  }
-
-  updateAvatar(avatar) {
+  updateAvatar(data) {
     return fetch(`${this._baseUrl}/users/me/avatar`, {
       method: 'PATCH',
       headers: this._headers,
-      body: JSON.stringify({ avatar })
+      body: JSON.stringify({ 
+        avatar: data.avatar 
+      })
     })
     .then(this._checkResponse)
   }
