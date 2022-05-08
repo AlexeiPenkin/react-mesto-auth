@@ -16,11 +16,6 @@
   transition: 1s ease;
 }
 
-.form__submit-button.form__submit_type_delete-confirm {
-  margin-top: 38px;
-  margin-bottom: 36px;
-}
-
 .form__submit-button:hover {
   border-radius: 2px;
   cursor: pointer;

@@ -17,6 +17,7 @@ export function App() {
   const [isAddPlacePopupOpen, setAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = useState(false);
   const [isDeleteConfirmPopupOpen, setisDeleteConfirmPopupOpen] = useState(false);
+  const [isImagePopupOpen, setIsImagePopupOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState(null);
   const [cards, setCards] = useState([]);
   const [deleteCard, setDeleteCard] = useState({});
@@ -132,6 +133,11 @@ export function App() {
     setDeleteCard(card);
   }
 
+  function handleImagePopupOpen(card) {
+    setIsImagePopupOpen(true);
+    setDeleteCard(card);
+  }
+
   const  closeAllPopups = () => {
     setEditProfilePopupOpen(false);
     setAddPlacePopupOpen(false);
@@ -184,6 +190,7 @@ export function App() {
               card={deleteCard}
           />
           <ImagePopup
+              isOpen={handleImagePopupOpen}
               card={selectedCard}
               onClose={closeAllPopups}>
           </ImagePopup>

@@ -11,9 +11,9 @@ export function DeleteConfirmPopup(props) {
 
   return (
     <PopupWithForm
-      name={'popup_delete-confirm'}
-      title={'Вы уверены?'}
-      buttonText={'Да'}
+      name='popup_delete-confirm'
+      title='Вы уверены?'
+      buttonText='Да'
       isOpen={props.isOpen}
       onClose={props.onClose}
       onSubmit={handleSubmit}
@@ -21,9 +21,8 @@ export function DeleteConfirmPopup(props) {
     >
       <button
         type="submit"
-        className="form__submit-button form__submit_type_delete-confirm">
-        {props.onLoading ? "Удаление..." : "Да"}
+        className="form__submit-button form__submit-button_type_delete-confirm">{props.onLoading ? "Удаление..." : "Да"}
       </button>
     </PopupWithForm>
   )
-} 
+}
