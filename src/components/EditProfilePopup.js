@@ -40,6 +40,7 @@ export function EditProfilePopup(props) {
           isOpen={props.isOpen}
           onSubmit={handleSubmit}
           onClose={props.onClose}
+          closeAllPopups={props.onClose}
       >
       <input 
           className="form__input" 
@@ -67,6 +68,11 @@ export function EditProfilePopup(props) {
           required
       />
       <p className="form__input-error" id="text_job-error"/>
+      <button
+          type="submit"
+          className="form__submit-button">
+          {props.onLoading ? "Сохранение..." : "Сохранить"}
+      </button>
       </PopupWithForm>
   )
 }

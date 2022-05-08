@@ -3,6 +3,7 @@ import { PopupWithForm } from './PopupWithForm';
 
 
 export function DeleteConfirmPopup(props) {
+
   const handleSubmit = (e) => {
     e.preventDefault();
     props.onDeleteConfirm(props.card)
@@ -16,7 +17,13 @@ export function DeleteConfirmPopup(props) {
       isOpen={props.isOpen}
       onClose={props.onClose}
       onSubmit={handleSubmit}
-      isValid={true}
-    />
+      closeAllPopups={props.onClose}
+    >
+      <button
+        type="submit"
+        className="form__submit-button form__submit_type_delete-confirm">
+        {props.onLoading ? "Удаление..." : "Да"}
+      </button>
+    </PopupWithForm>
   )
-}
+} 

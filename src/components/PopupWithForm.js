@@ -1,11 +1,27 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 export function PopupWithForm(props) {
+
+  useEffect(() => {
+    if (!props.isOpen) return;
+    
+    function handleEsc(e) {
+      if (e.key === "Escape") {
+        props.closeAllPopups();
+      }
+    }
+  
+    document.addEventListener("keydown", handleEsc);
+    return () => {
+      document.removeEventListener("keydown", handleEsc);
+    }
+  }, [props.isOpen]);
+
   return (
     <div className={`popup ${props.name} ${props.isOpen ? 'popup_opened': ''}`}>
       <div className="popup__container">
       <button 
-        className="popup__close-button" 
+        className="popup__close-button"
         type="button" 
         title="Закрыть" 
         onClick={props.onClose}>{props.buttonText}
@@ -17,10 +33,6 @@ export function PopupWithForm(props) {
               {props.children}
               <span className="form__input-error"></span>
             </label>
-            <button 
-                className="form__submit-button" 
-                type="submit">{props.buttonText}
-              </button>
           </fieldset>
         </form>
       </div>

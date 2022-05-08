@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { PopupWithForm } from './PopupWithForm';
-// import {CurrentUserContext} from "../contexts/CurrentUserContext";
+
+
 
 export function AddPlacePopup(props) {
-  // const currentUser = useContext(CurrentUserContext);
 
-  const [name, setName] = useState([]);
-  const [link, setLink] = useState([]);
+  const [name, setName] = useState(['']);
+  const [link, setLink] = useState(['']);
 
   function handleCardName(e) {
     setName(e.target.value);
@@ -37,6 +37,7 @@ export function AddPlacePopup(props) {
       isOpen={props.isOpen}
       onSubmit={handleSubmit}
       onClose={props.onClose}
+      closeAllPopups={props.onClose}
     >
       <input 
         className="form__input" 
@@ -62,6 +63,11 @@ export function AddPlacePopup(props) {
         onChange={handleCardLink}
       />
       <p className="form__input-error" id="card_link-error"/>
+      <button 
+        type="submit"
+        className="form__submit-button">
+        {props.onLoading ? "Сохранение..." : "Создать"}
+      </button>
     </PopupWithForm>
   )
 }

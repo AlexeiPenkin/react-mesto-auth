@@ -30,7 +30,9 @@ export function EditAvatarPopup(props) {
           buttonText='Сохранить'
           isOpen={props.isOpen}
           onClose={props.onClose}
-          onSubmit={handleSubmit}>
+          onSubmit={handleSubmit}
+          closeAllPopups={props.onClose}
+      >
           <input 
               className="form__input" 
               id="avatar" 
@@ -41,6 +43,11 @@ export function EditAvatarPopup(props) {
               ref={avatarRef}
           />
           <p className='popup__input-error' id='avatar_link-error'/>
+          <button
+              type="submit"
+              className="form__submit-button">
+              {props.onLoading ? "Сохранение..." : "Сохранить"}
+          </button>
       </PopupWithForm>
   )
 }

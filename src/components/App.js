@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import '../index.css';
 import { api } from '../utils/Api';
 import { Header } from './Header';
 import { Main } from './Main';
@@ -11,15 +10,18 @@ import { ImagePopup } from './ImagePopup';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import { DeleteConfirmPopup } from './DeleteConfirmPopup';
 
+
 export function App() {
+  const [currentUser, setCurrentUser] = React.useState({name: '', about: '', avatar: ''});
   const [isEditProfilePopupOpen, setEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = useState(false);
   const [isDeleteConfirmPopupOpen, setisDeleteConfirmPopupOpen] = useState(false);
+  const [selectedCard, setSelectedCard] = useState(null);
   const [cards, setCards] = useState([]);
   const [deleteCard, setDeleteCard] = useState({});
-  const [selectedCard, setSelectedCard] = useState(null);
-  const [currentUser, setCurrentUser] = React.useState({name: '', about: '', avatar: ''});
+  const [isLoading, setIsLoading] = useState(false);
+
 
   useEffect(() => {
     Promise.all([api.getProfile(), api.getCards()])
@@ -30,22 +32,14 @@ export function App() {
       .catch((err) => {
         console.log(err);
       })
-  }, [])
-
-  useEffect(() => {
-    const closeByEscape = (e) => {
-      if (e.key === 'Escape') {
-        closeAllPopups();
-      }
-    }
-    document.addEventListener('keydown', closeByEscape);
-      return () => document.removeEventListener('keydown', closeByEscape);
-  }, [])
+  }, []);
 
   function handleUpdateUser(data) {
+    setIsLoading(true);
     api.editProfile(data)
         .then(res => {
             setCurrentUser(res);
+            closeAllPopups()
         })
         .then(() => {
             setEditProfilePopupOpen(false);
@@ -53,31 +47,44 @@ export function App() {
         .catch((err) => {
             console.log(err);
         })
+        .finally(() => {
+          setIsLoading(false);
+        })
   }
 
   function handleUpdateAvatar(data) {
+    setIsLoading(true);
     api.updateAvatar(data)
         .then(res => {
-            setCurrentUser(res);
+          setCurrentUser(res);
+          closeAllPopups()
         }) 
         .then(() => {
-            setEditAvatarPopupOpen(false);
+          setEditAvatarPopupOpen(false);
         })
         .catch((err) => {
             console.log(err);
         })
+        .finally(() => {
+          setIsLoading(false);
+        })
   }
 
   function handleAddPlaceSubmit(data) {
+    setIsLoading(true);
     api.addCard(data)
       .then((newCard) => {
         setCards([newCard, ...cards]);
+        closeAllPopups()
       })
       .then(() => {
         handleAddPlacePopupOpen(false);
       })
       .catch((err) => {
         console.log(err);
+      })
+      .finally(() => {
+        setIsLoading(false);
       })
   }
 
@@ -86,6 +93,7 @@ export function App() {
     api.changeLikeCardStatus(card._id, !isLiked)
       .then((newCard) => {
         setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
+        closeAllPopups()
       })
       .catch((err) => {
         console.log(err);
@@ -124,7 +132,7 @@ export function App() {
     setDeleteCard(card);
   }
 
-  function closeAllPopups() {
+  const  closeAllPopups = () => {
     setEditProfilePopupOpen(false);
     setAddPlacePopupOpen(false);
     setEditAvatarPopupOpen(false);
@@ -151,25 +159,28 @@ export function App() {
               buttonText='Сохранить'
               onUpdateUser={handleUpdateUser}
               onClose={closeAllPopups}
+              onLoading={isLoading}
           />
           <AddPlacePopup
               isOpen={isAddPlacePopupOpen}
               buttonText='Создать'
               onAddPlace={handleAddPlaceSubmit}
               onClose={closeAllPopups}
+              onLoading={isLoading}
           />
           <EditAvatarPopup
               isOpen={isEditAvatarPopupOpen}
               buttonText='Сохранить'
               onUpdateAvatar={handleUpdateAvatar}
               onClose={closeAllPopups}
+              onLoading={isLoading}
           />
           <DeleteConfirmPopup
               isOpen={isDeleteConfirmPopupOpen}
-              title='Вы уверены?'
               buttonText='Да'
               onDeleteConfirm={handleCardDelete}
               onClose={closeAllPopups}
+              onLoading={isLoading}
               card={deleteCard}
           />
           <ImagePopup
