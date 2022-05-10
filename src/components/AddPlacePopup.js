@@ -5,8 +5,8 @@ import { PopupWithForm } from './PopupWithForm';
 
 export function AddPlacePopup(props) {
 
-  const [name, setName] = useState(['']);
-  const [link, setLink] = useState(['']);
+  const [name, setName] = useState('');
+  const [link, setLink] = useState('');
 
   function handleCardName(e) {
     setName(e.target.value);
