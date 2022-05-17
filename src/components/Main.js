@@ -1,9 +1,9 @@
 import React from 'react';
-import { Card } from './Card';
+import Card from './Card';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
 
-export function Main(props) {
+export default function Main(props) {
   const currentUser = React.useContext(CurrentUserContext);
   
   return (

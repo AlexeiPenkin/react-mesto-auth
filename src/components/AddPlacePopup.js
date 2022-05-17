@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { PopupWithForm } from './PopupWithForm';
+import PopupWithForm from './PopupWithForm';
 
 
 
-export function AddPlacePopup(props) {
+export default function AddPlacePopup(props) {
 
   const [name, setName] = useState('');
   const [link, setLink] = useState('');
@@ -41,7 +41,7 @@ export function AddPlacePopup(props) {
     >
       <input 
         className="form__input" 
-        id='name' 
+        id='place-name' 
         name="title" 
         type="text" 
         placeholder="Название" 
