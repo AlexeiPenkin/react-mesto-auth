@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useContext } from 'react';
-import PopupWithForm from './PopupWithForm';
+import { PopupWithForm } from './PopupWithForm';
 import {CurrentUserContext} from "../contexts/CurrentUserContext";
 
-export default function EditProfilePopup(props) {
+export function EditProfilePopup(props) {
   const currentUser = useContext(CurrentUserContext);
 
   const [name, setName] = useState('');
@@ -51,8 +51,7 @@ export default function EditProfilePopup(props) {
           maxLength="40" 
           minLength="2" 
           onChange={handleNameChange}
-          value={''}
-          
+          value={name}
           required
       />
       <p className="form__input-error" id="text_name-error"/>
@@ -65,7 +64,7 @@ export default function EditProfilePopup(props) {
           maxLength="200" 
           minLength="2" 
           onChange={handleDescriptionChange}
-          value={''}
+          value={description}
           required
       />
       <p className="form__input-error" id="text_job-error"/>

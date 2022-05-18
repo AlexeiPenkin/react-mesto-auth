@@ -1,8 +1,8 @@
 import React from 'react';
-import PopupWithForm from './PopupWithForm';
+import { PopupWithForm } from './PopupWithForm';
 
 
-export default function DeleteConfirmPopup(props) {
+export function DeleteConfirmPopup(props) {
 
   const handleSubmit = (e) => {
     e.preventDefault();

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-export default function ImagePopup(props) {
+export function ImagePopup(props) {
 
   useEffect(() => {
     if (!props.isOpen) return;
