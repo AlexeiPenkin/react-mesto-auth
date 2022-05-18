@@ -1,7 +1,7 @@
 import React from 'react';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
-export function Card({ card, ...props }) {
+export default function Card({ card, ...props }) {
 
   // Подписываем на контескт
   const currentUser = React.useContext(CurrentUserContext);
