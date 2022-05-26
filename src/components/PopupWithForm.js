@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-export function PopupWithForm(props) {
+export default function PopupWithForm(props) {
 
   useEffect(() => {
     if (!props.isOpen) return;
@@ -15,15 +15,16 @@ export function PopupWithForm(props) {
     return () => {
       document.removeEventListener("keydown", handleEsc);
     }
+    // eslint-disable-next-line
   }, [props.isOpen]);
 
   return (
-    <div className={`popup ${props.name} ${props.isOpen ? 'popup_opened': ''}`}>
+    <div className={`popup ${props.name} ${props.isOpen ? 'popup_opened' : ''}`}>
       <div className="popup__container">
-      <button 
+      <button
         className="popup__close-button"
-        type="button" 
-        title="Закрыть" 
+        type="button"
+        title="Закрыть"
         onClick={props.onClose}>{props.buttonText}
       </button>
         <form className="form" name={props.name} onSubmit={props.onSubmit}>

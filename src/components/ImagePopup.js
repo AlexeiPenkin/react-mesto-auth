@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-export function ImagePopup(props) {
+export default function ImagePopup(props) {
 
   useEffect(() => {
     if (!props.isOpen) return;
@@ -15,6 +15,7 @@ export function ImagePopup(props) {
     return () => {
       document.removeEventListener("keydown", handleEsc);
     }
+    // eslint-disable-next-line
   }, [props.isOpen]);
 
   return (
