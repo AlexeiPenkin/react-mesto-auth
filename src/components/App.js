@@ -23,8 +23,9 @@ function App() {
   const [ currentUser, setCurrentUser ] = useState({});
   const [ cards, setCards ] = useState([]);
   const [ userData, setUserData ] = useState({});
-  const [ infoToolTipData, setInfoToolTipData ] = useState({
-    title: 'Что-то пошло не так! Попробуйте ещё раз.', icon: false});
+  const [ infoToolTipData, setInfoToolTipData ] = useState(false);
+  // const [ infoToolTipData, setInfoToolTipData ] = useState({
+  //   title: 'Что-то пошло не так! Попробуйте ещё раз.', icon: false});
   const [ isInfoToolTipOpen, setInfoToolTipOpen ] = useState(false);
 
   const [ loggedIn, setLoggedIn ] = useState(false);
@@ -42,19 +43,6 @@ function App() {
   const [selectedCard, setSelectedCard] = useState(null);
   const [deleteCard, setDeleteCard] = useState({});
   const [isLoading, setIsLoading] = useState(false);
-
-
-
-  useEffect(() => {
-    Promise.all([api.getProfile(), api.getCards()])
-      .then(([data, cards]) => {
-        setCurrentUser(data);
-        setCards(cards);
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-  }, []);
 
   function handleUpdateUser(data) {
     setIsLoading(true);
@@ -182,52 +170,47 @@ function App() {
   // Авторизация -----------------------------------------------------------
 
   function handleRegister({ email, password }) {
-      return auth.register(email, password)
-      .then(res => {
-        const { email, password } = res.data;
-        setUserData({ ...userData, email, password })
-        if (res.data) {
-          history.push('/');
-          setInfoToolTipData({ icon: true, title: 'Вы успешно зарегистрировались!' });
-          handleInfoToolTip();
-        }
-        history.push("/signin");
-      })
-      .catch((err) => {
-        console.log(`Ошибка...: ${err}`);
-        setInfoToolTipData({ icon: false, title: 'Что-то пошло не так! Попробуйте ещё раз.' });
-      })
-      .finally(() => {
-        setInfoToolTipOpen(true);
-      })
-  }
+    return auth.register(email, password)
+    .then(res => {
+      const { email, password } = res.data;
+      setUserData({ ...userData, email, password })
+      if (res.data) {
+        history.push('/signin');
+        setInfoToolTipData({ icon: true, title: 'Вы успешно зарегистрировались!' });
+        handleInfoToolTip();
+      }
+    })
+    .catch((err) => {
+      console.log(`Ошибка...: ${err}`);
+      setInfoToolTipData({ icon: false, title: 'Что-то пошло не так! Попробуйте ещё раз.' });
+      handleInfoToolTip();
+    })
+}
 
-  function handleLogin({ email, password }) {
-    return auth.authorize(email, password)
-      .then((data) => {
-        console.log(data)
-        if (data.jwt) {
-          localStorage.setItem('jwt', data.jwt);
-          tokenCheck();
-          history.push('/');
-        }
-      })
-      .catch((err) => {
-        console.log(`Ошибка...: ${err}`);
-        setInfoToolTipData({ icon: false, title: 'Что-то пошло не так! Попробуйте ещё раз.' });
-      })
-      .finally(() => {
-        setInfoToolTipOpen(true);
-      })
-  }
+function handleLogin({ email, password }) {
+  return auth.authorize(email, password)
+    .then((data) => {
+      console.log(data)
+      if (data.token) {
+        localStorage.setItem('token', data.token);
+        tokenCheck();
+        history.push('/');
+      }
+    })
+    .catch((err) => {
+      console.log(`Ошибка...: ${err}`);
+      setInfoToolTipData({ icon: false, title: 'Что-то пошло не так! Попробуйте ещё раз.' });
+      handleInfoToolTip();
+    })
+}
 
   function tokenCheck() {
-    if (localStorage.getItem('jwt')){
-      let jwt = localStorage.getItem('jwt');
-      if (!jwt) {
+    if (localStorage.getItem('token')){
+      let token = localStorage.getItem('token');
+      if (!token) {
         return setIsLoading(false);
       }
-      auth.getContent(jwt)
+      auth.getContent(token)
         .then((res) => {
           const { _id, email } = res.data;
           setLoggedIn(true);
@@ -240,9 +223,9 @@ function App() {
   }
 
   function handleLogout() {
-      localStorage.removeItem('jwt');
+      localStorage.removeItem('token');
       setLoggedIn(false);
-      setUserData(null); /* setUserData({ _id, email }); */
+      setUserData({ email: '' });
       history.push('/signin');
     }
 
@@ -252,7 +235,7 @@ function App() {
 
   useEffect(() => {
     if (loggedIn) {
-      Promise.all([ api.getUser(), api.getInitialCards() ])
+      Promise.all([ api.getProfile(), api.getCards() ])
         .then(([ userData, cardsData ]) => {
           setCurrentUser(userData);
           setCards(cardsData);
@@ -273,9 +256,10 @@ function App() {
       <CurrentUserContext.Provider value={ currentUser }>
         <div className="page">
           <Header 
-            loggedIn={loggedIn} 
+            // loggedIn={loggedIn}
             onLogout={handleLogout} 
-            userData={userData}
+            userEmail={userData.email}
+            // userData={userData}
           />
             <Switch>
 
@@ -329,7 +313,7 @@ function App() {
           />
           <AddPlacePopup
             isOpen={isAddPlacePopupOpen}
-            buttonText='Создать'
+            // buttonText='Создать'
             onAddPlace={handleAddPlaceSubmit}
             onClose={closeAllPopups}
             onLoading={isLoading}

@@ -6,7 +6,6 @@ function Login(props) {
     email: '', 
     password: '' 
   });
-  // const [message, setMessage] = useState('');
 
   function handleChange(e) {
     const {name, value} = e.target;
@@ -18,12 +17,8 @@ function Login(props) {
 
   function handleSubmit(e) {
     e.preventDefault();
-    console.log('data', data)
     const { email, password } = data;
     props.onLogin({ email, password })
-    // .catch(err => {
-    //   setMessage(err.message);
-    // })
   }
 
   return (

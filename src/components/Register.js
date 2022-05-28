@@ -6,7 +6,6 @@ function Register(props) {
     email: '', 
     password: '' 
   });
-  // const [message, setMessage] = useState('');
 
   function handleChange(e) {
     const {name, value} = e.target;
@@ -16,18 +15,11 @@ function Register(props) {
     }));
   }
 
-  // useEffect(() => {
-  //   setFormValid(false);
-  // }, []);
-
   function handleSubmit(evt) {
     evt.preventDefault();
     console.log('data', data)
     const { email, password } = data;
     props.onRegister({ email, password })
-      // .catch(err => {
-      //   setMessage(err.message);
-      // })
   }
 
   return (

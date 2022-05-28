@@ -1,30 +1,26 @@
 export const baseUrl = 'https://auth.nomoreparties.co';
 
-const checkResponse = (res) => {
+export function checkResponse(res) {
   if (res.ok) {
     return res.json();
   }
-  return res.json()
-      .then((data) => {
-        // console.log(data);
-        throw new Error(data.message[0].messages[0].message);
-      });
-};
+  return Promise.reject(res.status);
+}
 
-export const register = (username, password, email) => {
-  return fetch(`${baseUrl}/signup`, { // /auth/local/register
+export function register(email, password) {
+  return fetch(`${baseUrl}/signup`, {
     method: 'POST',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ username, password, email })
+    body: JSON.stringify({ email, password })
 	})
     .then(checkResponse)
 };
 
-export const authorize = (email, password) => {
-  return fetch(`${baseUrl}/signin`, { // /auth/local
+export function authorize(email, password) {
+  return fetch(`${baseUrl}/signin`, {
     method: 'POST',
     headers: {
       Accept: 'application/json',
@@ -35,13 +31,13 @@ export const authorize = (email, password) => {
     .then(checkResponse)
 };
 
-export const getContent = (jwt) => {
+export function getContent(token) {
   return fetch(`${baseUrl}/users/me`, {
     method: 'GET',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${jwt}`
+      Authorization: `Bearer ${token}`
     }
   })
     .then(checkResponse)

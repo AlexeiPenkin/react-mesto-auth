@@ -14,9 +14,9 @@ function InfoTooltip({ title, icon, isOpen, onClose }) {
         </button>
         {icon
           ?
-          (<img className="popup__success-icon" src={SuccessIcon} alt="успех"/>)
+          (<img className="popup__success-icon" src={SuccessIcon} alt="Успешно"/>)
           :
-          (<img className="popup__error-icon" src={ErrorIcon} alt="ошибка"/>)
+          (<img className="popup__error-icon" src={ErrorIcon} alt="Ошибка"/>)
         }
         <h2 className="popup__title popup__title_type_info-tooltip">{`${title}`}</h2>
       </div>

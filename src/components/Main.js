@@ -1,13 +1,14 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Card from './Card';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
 
 export default function Main(props) {
-  const currentUser = React.useContext(CurrentUserContext);
+  const currentUser = useContext(CurrentUserContext);
   
   return (
     <main className='content'>
+
       <section className="profile">
         <picture 
           className="profile__avatar-update"
@@ -39,16 +40,17 @@ export default function Main(props) {
       </section>
 
       <div className="card-list">
-      {props.cards.map((card) => (
-            <Card
-              key={card._id}
-              card={card}
-              onCardClick={props.onCardClick}
-              onCardLike={props.onCardLike}
-              onCardDelete={props.onCardDelete}
-            />
+        {props.cards.map((card) => (
+          <Card
+            key={card._id}
+            card={card}
+            onCardClick={props.onCardClick}
+            onCardLike={props.onCardLike}
+            onCardDelete={props.onCardDelete}
+          />
         ))}
       </div>
+      
     </main>
   )
 }
