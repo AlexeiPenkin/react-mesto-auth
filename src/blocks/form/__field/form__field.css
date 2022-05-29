@@ -3,7 +3,6 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  /* margin-top: 54px; */
 }
 
 .form__fiel.form__field_type-named {

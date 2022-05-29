@@ -19,13 +19,11 @@ import Preloader from './Preloader';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import * as auth from '../utils/auth';
 
-function App() {
+const App = () => {
   const [ currentUser, setCurrentUser ] = useState({});
   const [ cards, setCards ] = useState([]);
   const [ userData, setUserData ] = useState({});
   const [ infoToolTipData, setInfoToolTipData ] = useState(false);
-  // const [ infoToolTipData, setInfoToolTipData ] = useState({
-  //   title: 'Что-то пошло не так! Попробуйте ещё раз.', icon: false});
   const [ isInfoToolTipOpen, setInfoToolTipOpen ] = useState(false);
 
   const [ loggedIn, setLoggedIn ] = useState(false);
@@ -167,13 +165,13 @@ function App() {
     setInfoToolTipOpen(false);
     }
 
-  // Авторизация -----------------------------------------------------------
-
+  // Авторизация ------------------------------------------------------------
+  
   function handleRegister({ email, password }) {
     return auth.register(email, password)
     .then(res => {
       const { email, password } = res.data;
-      setUserData({ ...userData, email, password })
+      setUserData({ email, password })
       if (res.data) {
         history.push('/signin');
         setInfoToolTipData({ icon: true, title: 'Вы успешно зарегистрировались!' });
@@ -190,7 +188,7 @@ function App() {
 function handleLogin({ email, password }) {
   return auth.authorize(email, password)
     .then((data) => {
-      console.log(data)
+      // console.log(data) //* возвращает токен *//
       if (data.token) {
         localStorage.setItem('token', data.token);
         tokenCheck();
@@ -212,9 +210,10 @@ function handleLogin({ email, password }) {
       }
       auth.getContent(token)
         .then((res) => {
+          // console.log(res)
           const { _id, email } = res.data;
           setLoggedIn(true);
-          setUserData({ _id, email });
+          setUserData(res.data);
         })
       .catch((err) => {
         console.log(`Ошибка...: ${err}`);
@@ -223,127 +222,123 @@ function handleLogin({ email, password }) {
   }
 
   function handleLogout() {
-      localStorage.removeItem('token');
-      setLoggedIn(false);
-      setUserData({ email: '' });
-      history.push('/signin');
-    }
+    localStorage.removeItem('token');
+    setLoggedIn(false);
+    setUserData({ email: '' });
+    history.push('/signin');
+  }
 
-  useEffect(() => {
-    tokenCheck();
-  }, []);
+    useEffect(() => {
+      tokenCheck();
+    }, []);
+  
+    useEffect(() => {
+      if (loggedIn) {
+        Promise.all([ api.getProfile(), api.getCards() ])
+          .then(([ userData, cardsData ]) => {
+            setCurrentUser(userData);
+            setCards(cardsData);
+          })
+          .catch((err) => {
+            console.error(err);
+          });
+        history.push('/');
+      }
+    }, [history, loggedIn]);
 
-  useEffect(() => {
-    if (loggedIn) {
-      Promise.all([ api.getProfile(), api.getCards() ])
-        .then(([ userData, cardsData ]) => {
-          setCurrentUser(userData);
-          setCards(cardsData);
-        })
-        .catch((err) => {
-          console.error(err);
-        });
-      history.push('/');
-    }
-  }, [history, loggedIn]);
+// --------------------------------------------------------------------------
 
-  // --------------------------------------------------------------------------
+return (
+  isLoading ? (
+    <Preloader />
+  ) : (
+    <CurrentUserContext.Provider value={ currentUser }>
+      <div className="page">
+        <Header 
+          onLogout={handleLogout} 
+          userEmail={userData.email}
+        />
+          <Switch>
 
-  return (
-    isLoading ? (
-      <Preloader />
-    ) : (
-      <CurrentUserContext.Provider value={ currentUser }>
-        <div className="page">
-          <Header 
-            // loggedIn={loggedIn}
-            onLogout={handleLogout} 
-            userEmail={userData.email}
-            // userData={userData}
-          />
-            <Switch>
+            <ProtectedRoute
+              exact path="/"
+              cards={cards}
+              loggedIn={loggedIn}
+              component={Main}
+              onEditProfile={handleEditProfilePopupOpen}
+              onAddPlace={handleAddPlacePopupOpen}
+              onEditAvatar={handleEditAvatarPopupOpen}
+              onCardClick={handleCardClick}
+              onCardLike={handleCardLike}
+              onCardDelete={handleCardDeletePopupOpen}>
+            </ProtectedRoute>
 
-              <ProtectedRoute
-                exact path="/"
-                cards={cards}
-                loggedIn={loggedIn}
-                component={Main}
-                onEditProfile={handleEditProfilePopupOpen}
-                onAddPlace={handleAddPlacePopupOpen}
-                onEditAvatar={handleEditAvatarPopupOpen}
-                onCardClick={handleCardClick}
-                onCardLike={handleCardLike}
-                onCardDelete={handleCardDeletePopupOpen}>
-                {/* <HeaderBar onLogout={handleLogout} /> */}
-              </ProtectedRoute>
+            <Route path="/signin">
+              <Login onLogin={handleLogin} tokenCheck={tokenCheck} />
+            </Route>
 
-              <Route path="/signin">
-                <Login onLogin={handleLogin} tokenCheck={tokenCheck} />
-              </Route>
+            <Route path="/signup">
+              <Register onRegister={handleRegister} regStatus={regStatus} />
+            </Route>
 
-              <Route path="/signup">
-                <Register onRegister={handleRegister} regStatus={regStatus} />
-              </Route>
+            <Route exact path="/">
+              {loggedIn ? <Redirect to="/" /> : <Redirect to="/signin" />}
+            </Route>
 
-              <Route exact path="/">
-                {loggedIn ? <Redirect to="/" /> : <Redirect to="/signin" />}
-              </Route>
+            <Route path="/*">
+              <NotFound />
+            </Route>
 
-              <Route path="/*">
-                <NotFound />
-              </Route>
+          </Switch>
 
-            </Switch>
-
-          <InfoTooltip
-          isOpen={isInfoToolTipOpen}
+        <InfoTooltip
+        isOpen={isInfoToolTipOpen}
+        onClose={closeAllPopups}
+        onEscClose={handleClick}
+        title={infoToolTipData.title}
+        icon={infoToolTipData.icon}
+        onLoading={isLoading}
+        resStatus={resStatus}
+        />
+        <EditProfilePopup
+          isOpen={isEditProfilePopupOpen}
+          buttonText='Сохранить'
+          onUpdateUser={handleUpdateUser}
           onClose={closeAllPopups}
-          onEscClose={handleClick}
-          title={infoToolTipData.title}
-          icon={infoToolTipData.icon}
           onLoading={isLoading}
-          resStatus={resStatus}
-          />
-          <EditProfilePopup
-            isOpen={isEditProfilePopupOpen}
-            buttonText='Сохранить'
-            onUpdateUser={handleUpdateUser}
-            onClose={closeAllPopups}
-            onLoading={isLoading}
-          />
-          <AddPlacePopup
-            isOpen={isAddPlacePopupOpen}
-            // buttonText='Создать'
-            onAddPlace={handleAddPlaceSubmit}
-            onClose={closeAllPopups}
-            onLoading={isLoading}
-          />
-          <EditAvatarPopup
-            isOpen={isEditAvatarPopupOpen}
-            buttonText='Сохранить'
-            onUpdateAvatar={handleUpdateAvatar}
-            onClose={closeAllPopups}
-            onLoading={isLoading}
-          />
-          <DeleteConfirmPopup
-            isOpen={isDeleteConfirmPopupOpen}
-            buttonText='Да'
-            onDeleteConfirm={handleCardDelete}
-            onClose={closeAllPopups}
-            onLoading={isLoading}
-            card={deleteCard}
-          />
-          <ImagePopup
-            isOpen={handleImagePopupOpen}
-            card={selectedCard}
-            onClose={closeAllPopups}>
-          </ImagePopup>
+        />
+        <AddPlacePopup
+          isOpen={isAddPlacePopupOpen}
+          onAddPlace={handleAddPlaceSubmit}
+          onClose={closeAllPopups}
+          onLoading={isLoading}
+        />
+        <EditAvatarPopup
+          isOpen={isEditAvatarPopupOpen}
+          buttonText='Сохранить'
+          onUpdateAvatar={handleUpdateAvatar}
+          onClose={closeAllPopups}
+          onLoading={isLoading}
+        />
+        <DeleteConfirmPopup
+          isOpen={isDeleteConfirmPopupOpen}
+          buttonText='Да'
+          onDeleteConfirm={handleCardDelete}
+          onClose={closeAllPopups}
+          onLoading={isLoading}
+          card={deleteCard}
+        />
+        <ImagePopup
+          isOpen={handleImagePopupOpen}
+          card={selectedCard}
+          onClose={closeAllPopups}>
+        </ImagePopup>
 
-          <Footer/>
-        </div>
-      </CurrentUserContext.Provider>
-    )
-  ) 
+        <Footer/>
+      </div>
+    </CurrentUserContext.Provider>
+  )
+) 
 }
 
 export default App;

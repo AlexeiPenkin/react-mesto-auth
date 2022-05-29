@@ -124,7 +124,7 @@
 @import url(./blocks/form/__set/form__set.css);
 @import url(./blocks/form/__set/_active/form__set_active.css);
 @import url(./blocks/form/__submit-button/form__submit-button.css);
-@import url(./blocks/form/__submit-button/_disabled/form__submit-button_disabled.CSS);
+@import url(./blocks/form/__submit-button/_disabled/form__submit-button_disabled.css);
 @import url(./blocks/form/__submit-button/_type/_delete-confirm/form__submit-button_type_delete-confirm.css);
 @import url(./blocks/form/__submit-button/_type/_update-avatar/form__submit-button_type_update-avatar.css);
 @import url(./blocks/form/__title/form__title.css);

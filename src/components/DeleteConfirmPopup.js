@@ -13,7 +13,6 @@ export default function DeleteConfirmPopup(props) {
     <PopupWithForm
       name='popup_delete-confirm'
       title='Вы уверены?'
-      // buttonText='Да'
       isOpen={props.isOpen}
       onClose={props.onClose}
       onSubmit={handleSubmit}

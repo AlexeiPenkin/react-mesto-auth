@@ -8,7 +8,6 @@ export default function Main(props) {
   
   return (
     <main className='content'>
-
       <section className="profile">
         <picture 
           className="profile__avatar-update"
@@ -50,7 +49,6 @@ export default function Main(props) {
           />
         ))}
       </div>
-      
     </main>
   )
 }

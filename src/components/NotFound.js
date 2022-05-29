@@ -6,7 +6,7 @@ export default function NotFound() {
 	return (
 		<div className="notfound">
 			<img className="notfound__image" src={notFound} alt="404" />
-			<Link to="/sign-in" className="notfound__link">
+			<Link to="/signin" className="notfound__link">
 				На главную
 			</Link>
 		</div>
