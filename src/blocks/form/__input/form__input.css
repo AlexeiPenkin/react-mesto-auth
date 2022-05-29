@@ -8,22 +8,18 @@
   background-color: transparent;
   margin: 0;
   padding: 0;
+  margin-top: 54px;
   padding-bottom: 11.76px;
-  margin-top: 0;
   border-bottom: 1px solid #c4c4c4;
   transition: 0.3s;
 }
 
-.form__input#name {
+.form__input#avatar-link {
   margin-top: 54px;
 }
 
-/* .form__input.form__input-link {
-  margin-top: 0;
-} */
-
 .form__input#avatar {
-  margin-top: 54px;
+  margin-top: 0;
 }
 
 .form__input:last-of-type {

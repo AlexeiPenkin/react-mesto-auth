@@ -4,19 +4,8 @@
   display: flex;
   flex-direction: column;
   /* margin-top: 54px; */
-  /* margin-bottom: 30px; */
 }
 
-/* .form__field.form__field_type-name {
-  margin-top: 38px;
-  margin-bottom: 0;
-}
-
-.form__field.form__field_type-info {
-  margin-top: 29.74px;
-  margin-bottom: 0;
-}
-
-.form__field.form_delete-confirm {
+.form__fiel.form__field_type-named {
   margin-top: 0;
-} */
+}
