@@ -3,5 +3,5 @@
   background: #fff;
   border: 1px solid #C4C4C4;
   pointer-events: none;
-  /* user-select: none; */
+  user-select: none;
 }
