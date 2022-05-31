@@ -68,7 +68,7 @@ function Login(props) {
                 required
                 minLength="2"
                 maxLength="40"
-                alue={props.email}
+                value={props.email}
                 onChange={handleEmailChange}
               />
               <span className={inputEmailErrorClassName}>
