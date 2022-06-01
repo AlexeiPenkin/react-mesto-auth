@@ -50,8 +50,7 @@ export default function EditProfilePopup(props) {
           maxLength="40" 
           minLength="2" 
           onChange={handleNameChange}
-          value={name}
-          
+          value={name || ""}
           required
       />
       <p className="form__input-error" id="text_name-error"/>
@@ -64,7 +63,7 @@ export default function EditProfilePopup(props) {
           maxLength="200" 
           minLength="2" 
           onChange={handleDescriptionChange}
-          value={description}
+          value={description || ""}
           required
       />
       <p className="form__input-error" id="text_job-error"/>
